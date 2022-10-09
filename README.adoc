@@ -30,6 +30,10 @@ Execute the jar file by:
 
 `java -jar PhotoFileDateRenamer.jar`
 
+=== Configuration
+
+Nope, no can do. No external configuration (yet). Use it if you like it.
+
 == Yes, fine and all that, but why?
 
 If you have heaps of old photos laying around your hardrive. You now have a tool to easy rename them to be able to organize them by date and occasion.
@@ -63,3 +67,9 @@ The photo capture date is extracted from (in descending priority):
 * `xmp` as file name suffix and xmp metadata information with `Date` and `DigitizedDateTime` is available then xmp metadata information `Date` is used.
 * `aae` as file name suffix and xml with `Date` is available then `Date` is used.
 * File creation date or file modified date, if any is available and before the other, and yet plausible old (after year 1990).
+
+== Disclaimer
+
+No warranty or any responsibility is taken for this application to work properly or your precious image file getting damaged.
+
+That being said, I have used this application for all of my own and the family photos without any hesitation for 4 years and rely on it for all photos we have taken. As I am pretty protective of my precious photos I've taken a fair bit of consideration programming it, and a lot of practical testing before trusting it.
