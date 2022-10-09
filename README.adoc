@@ -56,10 +56,10 @@ The format of the "date and time" part is the https://en.wikipedia.org/wiki/ISO_
 
 The photo capture date is extracted from (in descending priority):
 
-* EXIF information, `IFD0Directory - DateOriginal` (if file is `jpg`, `jpeg`, `gif`, `png`, and EXIF information is available)
-* EXIF information, `QuickTimeMetadataDirectory - CreationDate` (if file is `mov` and EXIF information is available)
-* EXIF information, `Mp4Directory - CreationTime` (if file is `mp4` and EXIF information is available)
-* EXIF information, `ExifIFD0Directory - DateTimeOriginal`(if file is `NEF` and EXIF information is available)
-* xmp metadata information, `Date` (if file is `xmp` and `Date` and `DigitizedDateTime` information is available)
-* xml information, `Date` (if file is `aae` and `Date` information is available)
+* `jpg`, `jpeg`, `gif`, `png` as file name suffix and EXIF information is available then EXIF `IFD0Directory - DateOriginal` is used.
+* `mov` as file name suffix and EXIF information is available then EXIF `QuickTimeMetadataDirectory - CreationDate` is used.
+* `mp4` as file name suffix and EXIF information is available then EXIF `Mp4Directory - CreationTime` is used.
+* `nef` as file name suffix and EXIF information is available then EXIF `ExifIFD0Directory - DateTimeOriginal` is used.
+* `xmp` as file name suffix and xmp metadata information with `Date` and `DigitizedDateTime` is available then xmp metadata information `Date` is used.
+* `aae` as file name suffix and xml with `Date` is available then `Date` is used.
 * File creation date or file modified date, if any is available and before the other, and yet plausible old (after year 1990).
