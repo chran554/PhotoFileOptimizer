@@ -17,9 +17,7 @@ public abstract class ImageUtils {
     }
 
     public static double getScaleFactor(int masterSize, int targetSize) {
-        return masterSize > targetSize
-                ? (double) targetSize / (double) masterSize
-                : (double) targetSize / (double) masterSize;
+        return (double) targetSize / (double) masterSize;
     }
 
 
@@ -106,6 +104,52 @@ public abstract class ImageUtils {
         return (amountQuadrantRotates > 0)
                 ? getRotatedImage(image, amountQuadrantRotates)
                 : image;
+    }
+
+    public static BufferedImage getFadeImage(BufferedImage image, double opacity) {
+        final int imageWidth = image.getWidth(null);
+        final int imageHeight = image.getHeight(null);
+
+        final BufferedImage fadedImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+
+        final int[] pixels = new int[imageWidth * imageWidth];
+        image.getRGB(0, 0, imageWidth, imageHeight, pixels, 0, imageWidth);
+
+        for (int i = 0; i < imageWidth * imageWidth; i++) {
+            final int originalAlpha = pixels[i] >>> 24;
+            final double newAlpha = originalAlpha * opacity;
+            pixels[i] = (pixels[i] & 0x00ffffff) | (((int) newAlpha) << 24);
+        }
+
+        fadedImage.setRGB(0, 0, imageWidth, imageHeight, pixels, 0, imageWidth);
+
+        return fadedImage;
+    }
+
+    public static BufferedImage getSaturatedImage(BufferedImage image, double factor) {
+        final int imageWidth = image.getWidth(null);
+        final int imageHeight = image.getHeight(null);
+
+        final BufferedImage desaturatedImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+
+        final int[] pixels = new int[imageWidth * imageWidth];
+        image.getRGB(0, 0, imageWidth, imageHeight, pixels, 0, imageWidth);
+
+        for (int i = 0; i < imageWidth * imageWidth; i++) {
+            final int r = (pixels[i] & 0x00ff0000) >> 16;
+            final int g = (pixels[i] & 0x0000ff00) >> 8;
+            final int b = (pixels[i] & 0x000000ff);
+
+            final float[] hsb = Color.RGBtoHSB(r, g, b, null);
+            hsb[1] = (float) (hsb[1] * factor);
+            final int rgb = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
+
+            pixels[i] = (pixels[i] & 0xff000000) | (rgb & 0x00ffffff);
+        }
+
+        desaturatedImage.setRGB(0, 0, imageWidth, imageHeight, pixels, 0, imageWidth);
+
+        return desaturatedImage;
     }
 
 }

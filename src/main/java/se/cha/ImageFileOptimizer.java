@@ -1,5 +1,7 @@
 package se.cha;
 
+import se.cha.ui.ImageFileDropPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
@@ -7,16 +9,16 @@ import java.awt.dnd.DropTarget;
 
 public class ImageFileOptimizer extends JFrame {
 
+    private final ImageFileProcessorFactory fileProcessorFactory = new ImageFileProcessorFactory();
 
     public ImageFileOptimizer() throws HeadlessException {
-        super("Image file optimizer and renamer");
+        super("Image file optimizer");
 
         LogUtil.configureSlf4jSimpleLogger();
 
         final ImageFileDropPanel dropPanel = new ImageFileDropPanel();
 
-        final FileProcessor fileProcessor = new ResaveAndRenameImageFileProcessor();
-        final ImageFileProcessorDropTargetListener dropTargetListener = new ImageFileProcessorDropTargetListener(fileProcessor, dropPanel);
+        final ImageFileProcessorDropTargetListener dropTargetListener = new ImageFileProcessorDropTargetListener(fileProcessorFactory, dropPanel);
         new DropTarget(dropPanel, dropTargetListener);
 
         final JPanel panel = new JPanel(new BorderLayout());

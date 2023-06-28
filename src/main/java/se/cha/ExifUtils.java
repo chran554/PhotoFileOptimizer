@@ -9,7 +9,6 @@ import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
-import org.apache.commons.imaging.formats.tiff.constants.TiffConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
@@ -94,10 +93,15 @@ public abstract class ExifUtils {
             final TiffImageMetadata exif = jpegMetadata.getExif();
 
             if (null != exif) {
-                final Short imageTransformation = (Short) exif.getFieldValue(TiffTagConstants.TIFF_TAG_ORIENTATION);
+                final Object value = exif.getFieldValue(TiffTagConstants.TIFF_TAG_ORIENTATION);
 
-                if (imageTransformation != null) {
-                    rotation = imageTransformation;
+                if (value instanceof Short) {
+                    // Rotation should be of Short type
+                    rotation = ((Short) value).intValue();
+                } else if (value instanceof Integer) {
+                    rotation = (Integer) value;
+                } else if (value instanceof Number) {
+                    rotation = ((Number) value).intValue();
                 }
             }
         }

@@ -11,16 +11,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeSet;
 
 public class ImageFileProcessorDropTargetListener implements DropTargetListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageFileProcessorDropTargetListener.class.getName());
 
-    private final FileProcessor fileProcessor;
+    private final ImageFileProcessorFactory fileProcessorFactory;
     private final ProgressListener progressListener;
 
-    public ImageFileProcessorDropTargetListener(FileProcessor fileProcessor, ProgressListener progressListener) {
-        this.fileProcessor = fileProcessor;
+    public ImageFileProcessorDropTargetListener(ImageFileProcessorFactory fileProcessorFactory, ProgressListener progressListener) {
+        this.fileProcessorFactory = fileProcessorFactory;
         this.progressListener = progressListener;
     }
 
@@ -33,8 +34,6 @@ public class ImageFileProcessorDropTargetListener implements DropTargetListener 
     public void dragExit(DropTargetEvent dte) { /* Nothing by intention */ }
 
     public void drop(DropTargetDropEvent dtde) {
-        LOGGER.trace("Drop in progress...");
-
         // final DataFlavor[] currentDataFlavors = dtde.getCurrentDataFlavors();
         final Transferable transferable = dtde.getTransferable();
 
@@ -53,7 +52,7 @@ public class ImageFileProcessorDropTargetListener implements DropTargetListener 
                     final List<File> droppedFiles = (List<File>) transferable.getTransferData(dataFlavor);
                     //System.out.println("transferData:\n" + StringUtils.join(transferData, "\n"));
 
-                    fileProcessor.processFiles(droppedFiles, progressListener);
+                    fileProcessorFactory.createFileProcessor().processFiles(new TreeSet<>(droppedFiles), progressListener);
 
                     dtde.dropComplete(true);
                 }

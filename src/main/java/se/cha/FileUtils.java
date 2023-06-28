@@ -7,7 +7,7 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.mov.metadata.QuickTimeMetadataDirectory;
 import com.drew.metadata.mp4.Mp4Directory;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
@@ -93,7 +93,7 @@ public abstract class FileUtils {
         // Read image date from xmp xml-file.
         try {
 
-            final Map namespaces = new HashMap();
+            final Map<String, String> namespaces = new HashMap<>();
             namespaces.put("x", "adobe:ns:meta/");
             namespaces.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
             namespaces.put("dmf", "http://www.bibblelabs.com/DigitalMasterFile/1.0/");
