@@ -1,4 +1,4 @@
-= Photo file date renamer
+= Photo file optimizer
 
 A user-friendly tool to add the date of photography to the file name of a set of photo files dropped in the application window. You can also drop a folder into the application window as the renamer will traverse any subdirectories in search for photo files to rename.
 
@@ -6,8 +6,12 @@ The application will also optimise the image file size by re-saving your image i
 
 The file will not be renamed twice if you would accidentally run a file twice through the renamer application. The file will not be renamed if it already has a filename that match the pattern it should be renamed to.
 
-.PhotoFileDateRenamer application window
-image::documentation/images/photofiledaterenamer-screenshot.png[PhotoFileDateRenamer]
+The Photo file optimizer process your dropped files in a serial workflow (no parallell processing of several files at the same time), to be able to show a preview of the image in the application window.
+
+This is an application with a UI. It was never designed to handle in put or options at the command line. There is no command line interface.
+
+.PhotoFileOptimizer application window
+image::documentation/images/photofiledaterenamer-screenshot.png[PhotoFileOptimizer]
 
 == How to build
 
@@ -68,8 +72,17 @@ The photo capture date is extracted from (in descending priority):
 * `aae` as file name suffix and xml with `Date` is available then `Date` is used.
 * File creation date or file modified date, if any is available and before the other, and yet plausible old (after year 1990).
 
+== Future feature ideas
+
+* Option to process photo files in parallell to speed things up.
+* Command line interface to execute application in commandline mode (without UI).
+* Settings for date pattern when renaming photo files.
+* Settings for resave parameters (threshold and JPG quality).
+* Persist settings to file (if possible).
+
 == Disclaimer
 
-No warranty or any responsibility is taken for this application to work properly or your precious image file getting damaged.
+No warranty or any responsibility is taken for this application to work properly or your precious image file getting damaged. +
+(If you hesitate, please, try the application out on a copy of your photocollection.)
 
 That being said, I have used this application for all of my own and the family photos without any hesitation for 4 years and rely on it for all photos we have taken. As I am pretty protective of my precious photos I've taken a fair bit of consideration programming it, and a lot of practical testing before trusting it.
