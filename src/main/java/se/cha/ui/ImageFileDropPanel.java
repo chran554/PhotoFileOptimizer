@@ -7,16 +7,18 @@ import se.cha.State;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class ImageFileDropPanel extends JPanel implements ProgressListener {
 
     private static final int PROGRESSBAR_MAX = 10000;
     private static final Color COLOR_IMAGE_FADE = new Color(255, 255, 255, 200);
-    //private static final Color COLOR_TEXT = new Color(230, 210, 164);
-    private static final Color COLOR_TEXT = new Color(230, 210, 164).darker();
+    private static final Color COLOR_TEXT = new Color(230, 210, 164, 200).darker();
 
     private BufferedImage image = null;
     private JProgressBar progressBar;
@@ -26,6 +28,8 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
     private ImageCheckBox renameCheckbox;
     private ImageCheckBox resaveCheckbox;
     private ImageCheckBox resizeCheckbox;
+    private ImageButton settingsButton;
+    private java.util.List<ActionListener> actionListeners = new ArrayList<>();
 
     public ImageFileDropPanel() {
         super(new BorderLayout());
@@ -54,10 +58,10 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
         progressLabel.setForeground(COLOR_TEXT);
         progressLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        final JPanel componentPanel = new JPanel(new GridLayout(2, 0, 8, 8));
+        final JPanel componentPanel = new JPanel(new GridBagLayout());
         componentPanel.setOpaque(false);
-        componentPanel.add(progressLabel);
-        componentPanel.add(progressBar);
+        componentPanel.add(progressLabel, new GridBagConstraints(0,0,1,1,1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,10), 0,0));
+        componentPanel.add(progressBar, new GridBagConstraints(0,1,1,1,1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0,10,0,10), 0,0));
 
         final JPanel photoPanelContainer = new JPanel(new BorderLayout());
         photoPanelContainer.setOpaque(false);
@@ -74,10 +78,12 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
         BufferedImage buttonImageRename = null;
         BufferedImage buttonImageResize = null;
         BufferedImage buttonImageResave = null;
+        BufferedImage buttonImageSettings = null;
         try {
             buttonImageRename = ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-rename.png"));
             buttonImageResave = ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-resave.png"));
             buttonImageResize = ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-resize.png"));
+            buttonImageSettings = ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-settings.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,9 +92,9 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
         resaveCheckbox = new ImageCheckBox(buttonImageResave, ImageUtils.getFadeImage(ImageUtils.getSaturatedImage(buttonImageResave, 0.5), 0.5), 50, 50);
         resizeCheckbox = new ImageCheckBox(buttonImageResize, ImageUtils.getFadeImage(ImageUtils.getSaturatedImage(buttonImageResize, 0.5), 0.5), 50, 50);
 
-        renameCheckbox.setToolTipText("Renames dropped files according to pattern \"yyyy-mm-dd hh:mm <old file name>\".");
-        resaveCheckbox.setToolTipText("Resaves jpg files if the result file size will be 80% of the original size (or less).");
-        resizeCheckbox.setToolTipText("Rezises (shrinks) dropped image files to boundaries.");
+        renameCheckbox.setToolTipText("Enable rename of dropped files according to pattern \"yyyy-mm-dd hh:mm <old file name>\".");
+        resaveCheckbox.setToolTipText("Enable re-save of jpg files if the result file size will be at most a configured factor of the original size.");
+        resizeCheckbox.setToolTipText("Enable re-size (shrink) of dropped image files to configured maximum dimensions.");
 
         renameCheckbox.addActionListener(e -> updateState());
         resaveCheckbox.addActionListener(e -> updateState());
@@ -98,22 +104,33 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
         resaveCheckbox.setSelected(true);
         resizeCheckbox.setSelected(false);
 
-        resizeCheckbox.setEnabled(false);
+        resizeCheckbox.setEnabled(false); // TODO remove
+
+        settingsButton = new ImageButton(buttonImageSettings, 30, 30);
+        settingsButton.setToolTipText("Show settings");
+        settingsButton.addActionListener(e -> {
+            actionListeners.forEach(l-> l.actionPerformed(new ActionEvent(e.getSource(), 0, "settings")));
+        });
 
         final JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
 
-        buttonPanel.add(Box.createVerticalStrut(renameCheckbox.getHeight() / 2));
+        buttonPanel.add(Box.createVerticalStrut(renameCheckbox.getHeight() / 4));
         buttonPanel.add(renameCheckbox);
-        buttonPanel.add(Box.createVerticalStrut(resaveCheckbox.getHeight() / 2));
+        buttonPanel.add(Box.createVerticalStrut(resaveCheckbox.getHeight() / 4));
         buttonPanel.add(resaveCheckbox);
-        buttonPanel.add(Box.createVerticalStrut(resizeCheckbox.getHeight() / 2));
+        buttonPanel.add(Box.createVerticalStrut(resizeCheckbox.getHeight() / 4));
         buttonPanel.add(resizeCheckbox);
         buttonPanel.add(Box.createVerticalGlue());
+        buttonPanel.add(settingsButton);
 
         return buttonPanel;
+    }
+
+    public void addActionListener(ActionListener actionListener) {
+        actionListeners.add(actionListener);
     }
 
     @Override
@@ -154,7 +171,7 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
         final Graphics2D g2d = (Graphics2D) g;
 
         //g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        //g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 

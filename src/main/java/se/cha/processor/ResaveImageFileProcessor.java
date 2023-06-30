@@ -136,4 +136,9 @@ public class ResaveImageFileProcessor extends ImageFileProcessorTemplate {
         double threshold;
     }
 
+    @Value
+    public static class ResizeConfig {
+        int maxWidth;
+        int maxHeight;
+    }
 }

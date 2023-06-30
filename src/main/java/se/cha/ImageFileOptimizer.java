@@ -1,10 +1,14 @@
 package se.cha;
 
 import se.cha.ui.ImageFileDropPanel;
+import se.cha.ui.SettingsPanel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class ImageFileOptimizer extends JFrame {
@@ -21,8 +25,26 @@ public class ImageFileOptimizer extends JFrame {
         final ImageFileProcessorDropTargetListener dropTargetListener = new ImageFileProcessorDropTargetListener(fileProcessorFactory, dropPanel);
         new DropTarget(dropPanel, dropTargetListener);
 
-        final JPanel panel = new JPanel(new BorderLayout());
-        panel.add(dropPanel, BorderLayout.CENTER);
+        final SettingsPanel settingsPanel = new SettingsPanel();
+
+        final CardLayout cardLayout = new CardLayout();
+        final JPanel panel = new JPanel(cardLayout);
+        panel.add("drop", dropPanel);
+        panel.add("settings", settingsPanel);
+
+        cardLayout.show(panel, "drop");
+
+        dropPanel.addActionListener(e -> {
+            if ("settings".equals(e.getActionCommand())) {
+                cardLayout.show(panel, "settings");
+            }
+        });
+
+        settingsPanel.addActionListener(e -> {
+            if ("exit".equals(e.getActionCommand())) {
+                cardLayout.show(panel, "drop");
+            }
+        });
 
         setContentPane(panel);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
