@@ -1,9 +1,6 @@
 package se.cha;
 
-import se.cha.processor.AggregateFileProcessor;
-import se.cha.processor.FileProcessor;
-import se.cha.processor.RenameImageFileProcessor;
-import se.cha.processor.ResaveImageFileProcessor;
+import se.cha.processor.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +10,11 @@ public final class ImageFileProcessorFactory {
     public FileProcessor createFileProcessor() {
         final List<FileProcessor> fileProcessors = new ArrayList<>();
 
-        if (State.isRescaleEnabled()) {
-            //fileProcessors.add(new ResizeImageFileProcessor());
+        if (State.isResizeEnabled()) {
+            fileProcessors.add(new ResizeImageFileProcessor(State.getResizeConfig()));
         }
 
-        if (State.isResaveEnabled() && !State.isRescaleEnabled()) {
+        if (State.isResaveEnabled() && !State.isResizeEnabled()) {
             fileProcessors.add(new ResaveImageFileProcessor(State.getResaveConfig()));
         }
 

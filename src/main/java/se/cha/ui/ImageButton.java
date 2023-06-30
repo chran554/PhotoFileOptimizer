@@ -23,7 +23,7 @@ public class ImageButton extends JButton {
         this.height = height;
 
         this.image = image;
-        this.imageNoFocus = ImageUtils.getFadeImage(image, 0.5);
+        this.imageNoFocus = ImageUtils.getFadeImage(image, 0.4);
         this.imageDisabled = ImageUtils.getFadeImage(image, 0.25);
 
         final Dimension size = new Dimension(width, height);

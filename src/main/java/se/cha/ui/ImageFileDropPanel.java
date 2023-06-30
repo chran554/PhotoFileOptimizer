@@ -88,9 +88,9 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
             e.printStackTrace();
         }
 
-        renameCheckbox = new ImageCheckBox(buttonImageRename, ImageUtils.getFadeImage(ImageUtils.getSaturatedImage(buttonImageRename, 0.5), 0.5), 50, 50);
-        resaveCheckbox = new ImageCheckBox(buttonImageResave, ImageUtils.getFadeImage(ImageUtils.getSaturatedImage(buttonImageResave, 0.5), 0.5), 50, 50);
-        resizeCheckbox = new ImageCheckBox(buttonImageResize, ImageUtils.getFadeImage(ImageUtils.getSaturatedImage(buttonImageResize, 0.5), 0.5), 50, 50);
+        renameCheckbox = new ImageCheckBox(buttonImageRename, ImageUtils.getFadeImage(ImageUtils.getSaturatedImage(buttonImageRename, 0.2), 0.4), 50, 50);
+        resaveCheckbox = new ImageCheckBox(buttonImageResave, ImageUtils.getFadeImage(ImageUtils.getSaturatedImage(buttonImageResave, 0.2), 0.4), 50, 50);
+        resizeCheckbox = new ImageCheckBox(buttonImageResize, ImageUtils.getFadeImage(ImageUtils.getSaturatedImage(buttonImageResize, 0.2), 0.4), 50, 50);
 
         renameCheckbox.setToolTipText("Enable rename of dropped files according to pattern \"yyyy-mm-dd hh:mm <old file name>\".");
         resaveCheckbox.setToolTipText("Enable re-save of jpg files if the result file size will be at most a configured factor of the original size.");
@@ -103,8 +103,6 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
         renameCheckbox.setSelected(true);
         resaveCheckbox.setSelected(true);
         resizeCheckbox.setSelected(false);
-
-        resizeCheckbox.setEnabled(false); // TODO remove
 
         settingsButton = new ImageButton(buttonImageSettings, 30, 30);
         settingsButton.setToolTipText("Show settings");
@@ -172,6 +170,7 @@ public class ImageFileDropPanel extends JPanel implements ProgressListener {
 
         //g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 

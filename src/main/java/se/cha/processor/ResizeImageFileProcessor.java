@@ -14,6 +14,7 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,16 +29,13 @@ import java.util.Set;
 Read and save EXIF information:
 https://stackoverflow.com/questions/36868013/editing-jpeg-exif-data-with-java
 */
-public class ResaveImageFileProcessor extends ImageFileProcessorTemplate {
+public class ResizeImageFileProcessor extends ImageFileProcessorTemplate {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResaveImageFileProcessor.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResizeImageFileProcessor.class.getName());
 
-    private static final DecimalFormat ONE_DECIMAL_FORMAT = new DecimalFormat("##0.0");
-    private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("###,###,###,##0", new DecimalFormatSymbols(Locale.forLanguageTag("sv")));
+    private final ResizeConfig config;
 
-    private final ResaveConfig config;
-
-    public ResaveImageFileProcessor(ResaveConfig config) {
+    public ResizeImageFileProcessor(ResizeConfig config) {
         super(false);
         this.config = config;
     }
@@ -59,38 +57,44 @@ public class ResaveImageFileProcessor extends ImageFileProcessorTemplate {
                     // Rotate image if rotate information exist in exif meta data
                     final int exifTransformation = ExifUtils.getJpgFileExifRotation(jpgImageData);
                     final BufferedImage displayImage = ImageUtils.getExifRotatedImage(image, exifTransformation);
-
                     progressListener.setImage(displayImage);
                 }
 
-                final byte[] jpgQ9ImageData = getImageAsJpgQ9Data(image);
+                final double leastScaleFactor = Math.min(
+                        1.0 * config.getMaxWidth() / image.getWidth(),
+                        1.0 * config.getMaxHeight() / image.getHeight()
+                );
 
-                byte[] jpgQ9ImageWithExifData = jpgQ9ImageData;
+                if (leastScaleFactor < 1.0) {
+                    final int newWidth = Math.min((int) Math.round(image.getWidth() * leastScaleFactor), config.getMaxWidth());
+                    final int newHeight = Math.min((int) Math.round(image.getHeight() * leastScaleFactor), config.getMaxHeight());
 
-                // Add Exif information (if available, i.e. there is at least one exif directory present)
-                if (!jpgFileExifOutputSet.getDirectories().isEmpty()) {
-                    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream(jpgQ9ImageData.length + 1024 * 4);
-                    ExifUtils.writeJpgWithExif(jpgQ9ImageData, outputStream, jpgFileExifOutputSet);
+                    final BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, image.getType());
+                    final Graphics2D g2d = (Graphics2D) resizedImage.getGraphics();
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g2d.drawImage(image, 0, 0, newWidth, newHeight, null);
+                    g2d.dispose();
 
-                    jpgQ9ImageWithExifData = outputStream.toByteArray();
-                }
+                    final byte[] jpgQ9ImageData = getImageAsJpgQ9Data(resizedImage);
 
-                final int originalFileSize = jpgImageData.length;
-                final int resavedFileSize = jpgQ9ImageWithExifData.length;
-                final double fileSizeChangeFactor = 1.0 * resavedFileSize / originalFileSize;
+                    byte[] jpgQ9ImageWithExifData = jpgQ9ImageData;
+                    // Add Exif information (if available, i.e. there is at least one exif directory present)
+                    if (!jpgFileExifOutputSet.getDirectories().isEmpty()) {
+                        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream(jpgQ9ImageData.length + 1024 * 4);
+                        ExifUtils.writeJpgWithExif(jpgQ9ImageData, outputStream, jpgFileExifOutputSet);
+                        jpgQ9ImageWithExifData = outputStream.toByteArray();
+                    }
 
-                if (fileSizeChangeFactor <= config.getThreshold()) {
                     processed = true;
                     FileUtils.writeByteArrayToFile(imageFile, jpgQ9ImageWithExifData);
                     imageFile.setLastModified(fileLastModifiedTimeStamp);
 
-                    LOGGER.info(LogUtil.format("Resaved", imageFile, "Saved file size is " + INTEGER_FORMAT.format(resavedFileSize) + " bytes" +
-                            " (" + getPercentText(fileSizeChangeFactor) + " compared to the original size)." +
-                            "    (" + FileUtils.byteCountToDisplaySize(originalFileSize) + " --> " + FileUtils.byteCountToDisplaySize(resavedFileSize) + ")"));
+                    LOGGER.info(LogUtil.format("Resized", imageFile, "Image file is rescaled to " + newWidth + "x" + newHeight + " (" + (leastScaleFactor * 100) + "%)."));
                 } else {
-                    LOGGER.info(LogUtil.format("Not resaved", imageFile, "Optimization gain was too low. Optimized file size attempt was " + getPercentText(fileSizeChangeFactor) + " of original size, while resave threshold is set to " + getPercentText(config.getThreshold()) + "."));
+                    LOGGER.info(LogUtil.format("Resized", imageFile, "Image is already within specified dimensions (" + image.getWidth() + "x" + image.getHeight() + ")."));
                 }
-
 
             } catch (IOException | ImageWriteException e) {
                 e.printStackTrace();
@@ -106,10 +110,6 @@ public class ResaveImageFileProcessor extends ImageFileProcessorTemplate {
         return processed;
     }
 
-
-    private String getPercentText(double fileSizeChangeFactor) {
-        return ONE_DECIMAL_FORMAT.format(100.0 * fileSizeChangeFactor) + "%";
-    }
 
     private byte[] getImageAsJpgQ9Data(BufferedImage image) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -133,9 +133,9 @@ public class ResaveImageFileProcessor extends ImageFileProcessorTemplate {
     }
 
     @Value
-    public static class ResaveConfig {
+    public static class ResizeConfig {
+        int maxWidth;
+        int maxHeight;
         double quality;
-        double threshold;
     }
-
 }

@@ -2,6 +2,7 @@ package se.cha.ui;
 
 import se.cha.State;
 import se.cha.processor.ResaveImageFileProcessor;
+import se.cha.processor.ResizeImageFileProcessor;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -51,9 +52,8 @@ public class SettingsPanel extends JPanel {
         settingsPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
         settingsPanel.add(resaveSettingsPanel, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-        // TODO add resize as soon as the processor is finished
-        //settingsPanel.add(new JSeparator(JSeparator.HORIZONTAL), new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 10), 0, 0));
-        //settingsPanel.add(resizeSettingsPanel, new GridBagConstraints(0, 2, 1, 1, 0, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+        settingsPanel.add(new JSeparator(JSeparator.HORIZONTAL), new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 10), 0, 0));
+        settingsPanel.add(resizeSettingsPanel, new GridBagConstraints(0, 2, 1, 1, 0, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
         final JScrollPane scrollPane = new JScrollPane(settingsPanel);
         scrollPane.setBorder(null);
@@ -192,9 +192,9 @@ public class SettingsPanel extends JPanel {
         return new Dimension(maxWidth, maxHeight);
     }
 
-    private static ResaveImageFileProcessor.ResizeConfig getResizeConfig() {
+    private static ResizeImageFileProcessor.ResizeConfig getResizeConfig() {
         final Dimension maxDimensions = getResizeMaxDimensions();
-        return new ResaveImageFileProcessor.ResizeConfig(maxDimensions.width, maxDimensions.height);
+        return new ResizeImageFileProcessor.ResizeConfig(maxDimensions.width, maxDimensions.height, getResaveConfig().getQuality());
     }
 
     private static String getResaveText(int fileSizeThreshold, int jpgQuqality) {
