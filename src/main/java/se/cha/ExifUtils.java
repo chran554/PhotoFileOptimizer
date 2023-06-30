@@ -66,13 +66,12 @@ public abstract class ExifUtils {
         }
 
         // If file does not contain any exif metadata, we create an empty set of exif metadata.
-        // Otherwise, we keep all of the other existing tags.
+        // Otherwise, we keep all the other existing tags.
         if (null == outputSet) {
             outputSet = new TiffOutputSet();
         }
         return outputSet;
     }
-
 
     /**
      * Gets the image rotation as a constant of {@link TiffTagConstants}.

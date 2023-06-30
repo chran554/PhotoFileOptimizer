@@ -3,7 +3,7 @@
 A user-friendly tool to process photographs taken by high-end digital cameras (DSLRs), digital cameras or mobile phones.
 
 .PhotoFileOptimizer application window
-image::documentation/images/photofiledaterenamer-screenshot.png[PhotoFileOptimizer]
+image::documentation/images/photofileoptimizer-screenshot.png[PhotoFileOptimizer]
 
 == File rename
 
@@ -40,13 +40,13 @@ This is an application with a UI. It was never designed to handle in put or opti
 
 == How to build
 
-(There is a precompiled binary file in `bin/PhotoFileDateRenamer.jar`.)
+(There is a precompiled binary file in `bin/PhotoFileOptimizer.jar`.)
 
 Use maven to build this java program.
 
 `mvn clean package`
 
-You will find a created jar file at `target/PhotoFileDateRenamer.jar`.
+You will find a created jar file at `target/PhotoFileOptimizer.jar`.
 
 === Prerequisites
 
@@ -57,7 +57,7 @@ You will find a created jar file at `target/PhotoFileDateRenamer.jar`.
 
 Execute the jar file by:
 
-`java -jar PhotoFileDateRenamer.jar`
+`java -jar PhotoFileOptimizer.jar`
 
 === Configuration
 

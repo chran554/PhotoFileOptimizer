@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>se.cha</groupId>
-    <artifactId>PhotoFileDateRenamer</artifactId>
+    <artifactId>PhotoFileOptimizer</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -87,6 +87,7 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -105,8 +106,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <!--<mainClass>se.cha.MediaFileReorganizer</mainClass>-->
-                            <mainClass>se.cha.ImageFileOptimizer</mainClass>
+                            <mainClass>se.cha.PhotoFileOptimizer</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
