@@ -7,7 +7,7 @@ image::documentation/images/photofiledaterenamer-screenshot.png[PhotoFileOptimiz
 
 == File rename
 
-image::src/main/resources/images/icon-rename.png[rename, 50%, float="right"]
+image::src/main/resources/images/icon-rename.png[rename, 100, 100, float="right"]
 
 A user-friendly tool to add the date of photography to the file name of a set of photo files dropped in the application window. You can also drop a folder into the application window as the renamer will traverse any subdirectories in search for photo files to rename.
 
@@ -15,7 +15,7 @@ The file will not be renamed twice if you would accidentally run a file twice th
 
 == File size
 
-image::src/main/resources/images/icon-resave.png[resave, 50%, float="right"]
+image::src/main/resources/images/icon-resave.png[resave, 100, 100, float="right"]
 
 The application can also optimise the image file size by re-saving your image if it is a JPG image file.
 
@@ -23,7 +23,7 @@ It can re-save your jpg files, and it will only save the new file if the new fil
 
 == Image size
 
-image::src/main/resources/images/icon-resize.png[resize, 50%, float="right"]
+image::src/main/resources/images/icon-resize.png[resize, 100, 100, float="right"]
 
 The application can also resize the image.
 It can shrink your jpg images (not enlarge them) to a configured maximum pixel width and maximum pixel height while keeping the width-height aspect of your image. If the original image is already within the configured dimensions no action is taken.
