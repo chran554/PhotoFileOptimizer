@@ -8,8 +8,7 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>myproject</name>
-    <url>http://maven.apache.org</url>
+    <name>PhotoFileOptimizer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -112,6 +111,9 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <filters>
+                        <filter>src/assembly/filter.properties</filter>
+                    </filters>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
 
