@@ -2,6 +2,8 @@
 
 A user-friendly tool to process photographs taken by high-end digital cameras (DSLRs), digital cameras or mobile phones.
 
+It can optionally help you with photo file rename to include the capture date in the filename, jpg-file re-save to reduce file size at a very very low quality loss, and resize of image resolution.
+
 .PhotoFileOptimizer application window
 image::documentation/images/photofileoptimizer-screenshot.png[PhotoFileOptimizer]
 
