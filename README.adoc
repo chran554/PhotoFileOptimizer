@@ -42,7 +42,7 @@ This is an application with a UI. It was never designed to handle in put or opti
 
 == How to build
 
-(There is a precompiled binary file in `bin/PhotoFileOptimizer.jar`.)
+NOTE: There is a precompiled binary file at `bin/PhotoFileOptimizer.jar`.
 
 Use maven to build this java program.
 
@@ -63,7 +63,7 @@ Execute the jar file by:
 
 === Configuration
 
-Nope, no can do. No external configuration (yet). Use it if you like it.
+Nope, no can do. No external configuration (yet).
 
 == Yes, fine and all that, but why?
 
@@ -106,15 +106,14 @@ The photo capture date is extracted from (in descending priority):
 
 == Future feature ideas
 
-* Option to process photo files in parallell to speed things up.
+* Option to process photo files in parallel to speed things up.
 * Command line interface to execute application in commandline mode (without UI).
 * Settings for date pattern when renaming photo files.
-* Settings for resave parameters (threshold and JPG quality).
 * Persist settings to file (if possible).
 
 == Disclaimer
 
 No warranty or any responsibility is taken for this application to work properly or your precious image file getting damaged. +
-(If you hesitate, please, try the application out on a copy of your photocollection.)
+(If you hesitate, please, try the application out on a copy of your photo collection.)
 
 That being said, I have used this application for all of my own and the family photos without any hesitation for 4 years and rely on it for all photos we have taken. As I am pretty protective of my precious photos I've taken a fair bit of consideration programming it, and a lot of practical testing before trusting it.
