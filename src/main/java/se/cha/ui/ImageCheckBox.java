@@ -16,7 +16,7 @@ public class ImageCheckBox extends JCheckBox {
     private final int height;
 
     public ImageCheckBox(BufferedImage imageOn, BufferedImage imageOff, int width, int height) {
-        super(new ImageIcon(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)));
+        super(new BufferedImageIcon(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB), width, height));
 
         this.width = width;
         this.height = height;

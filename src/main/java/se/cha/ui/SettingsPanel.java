@@ -42,7 +42,7 @@ public class SettingsPanel extends JPanel {
             actionListeners.forEach(l -> l.actionPerformed(new ActionEvent(e.getSource(), 0, "exit")));
         });
 
-        final JLabel settingsLabel = new JLabel("<html><h2>Settings</h2></html>", new ImageIcon(getSettingsImage()), JLabel.LEFT);
+        final JLabel settingsLabel = new JLabel("<html><h2>Settings</h2></html>", new BufferedImageIcon(getSettingsImage(), 30, 30), JLabel.LEFT);
         settingsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         final JPanel resaveSettingsPanel = getResaveSettingsPanel();
@@ -64,24 +64,43 @@ public class SettingsPanel extends JPanel {
     }
 
     private static BufferedImage getSettingsImage() {
-        BufferedImage imageSettings = new BufferedImage(30, 30, BufferedImage.TYPE_INT_ARGB);
         try {
-            final BufferedImage imageCogWheel = ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-settings.png"));
-            final Graphics2D g2d = (Graphics2D) imageSettings.getGraphics();
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-
-            g2d.drawImage(imageCogWheel, 0,0, imageSettings.getWidth(), imageSettings.getHeight(), null);
-            g2d.dispose();
+            return ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-settings.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return imageSettings;
+        return null;
+    }
+
+    private static BufferedImage getResaveImage() {
+        try {
+            return ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-resave.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static BufferedImage getResizeImage() {
+        try {
+            return ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-resize.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static BufferedImage getRenameImage() {
+        try {
+            return ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-rename.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static JPanel getResizeSettingsPanel() {
-        final JLabel resizeLabel = new JLabel("<html><h3>Re-size</h3></html>");
+        final JLabel resizeLabel = new JLabel("<html><h3>Re-size</h3></html>", new BufferedImageIcon(getResizeImage(), 20, 20), JLabel.LEFT);
         final JLabel resizeExplanationLabel = new JLabel();
 
         final JPanel resizeSettingsPanel = new JPanel(new GridBagLayout());
@@ -124,7 +143,7 @@ public class SettingsPanel extends JPanel {
     }
 
     private static JPanel getResaveSettingsPanel() {
-        final JLabel resaveLabel = new JLabel("<html><h3>Re-save</h3></html>");
+        final JLabel resaveLabel = new JLabel("<html><h3>Re-save</h3></html>", new BufferedImageIcon(getResaveImage(), 20, 20), JLabel.LEFT);
         final JLabel resaveExplanationLabel = new JLabel();
 
         final JLabel thresholdValueLabel = new JLabel();

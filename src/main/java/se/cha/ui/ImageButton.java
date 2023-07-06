@@ -14,10 +14,10 @@ public class ImageButton extends JButton {
     private final BufferedImage imageDisabled;
     private final int width;
     private final int height;
-    private  boolean hasFocus = false;
+    private boolean hasFocus = false;
 
     public ImageButton(BufferedImage image, int width, int height) {
-        super(new ImageIcon(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)));
+        super(new BufferedImageIcon(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB), width, height));
 
         this.width = width;
         this.height = height;
