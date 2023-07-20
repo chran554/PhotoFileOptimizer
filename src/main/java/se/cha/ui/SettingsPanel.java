@@ -62,45 +62,8 @@ public class SettingsPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
         add(bottomButtonPanel, BorderLayout.SOUTH);
     }
-
-    private static BufferedImage getSettingsImage() {
-        try {
-            return ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-settings.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static BufferedImage getResaveImage() {
-        try {
-            return ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-resave.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static BufferedImage getResizeImage() {
-        try {
-            return ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-resize.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static BufferedImage getRenameImage() {
-        try {
-            return ImageIO.read(ClassLoader.getSystemResourceAsStream("images/icon-rename.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     private static JPanel getResizeSettingsPanel() {
-        final JLabel resizeLabel = new JLabel("<html><h3>Re-size</h3></html>", new BufferedImageIcon(getResizeImage(), 20, 20), JLabel.LEFT);
+        final JLabel resizeLabel = new JLabel("<html><h3>Re-size</h3></html>", new BufferedImageIcon(getResizeImage(), 30, 30), JLabel.LEFT);
         final JLabel resizeExplanationLabel = new JLabel();
 
         final JPanel resizeSettingsPanel = new JPanel(new GridBagLayout());
@@ -143,7 +106,7 @@ public class SettingsPanel extends JPanel {
     }
 
     private static JPanel getResaveSettingsPanel() {
-        final JLabel resaveLabel = new JLabel("<html><h3>Re-save</h3></html>", new BufferedImageIcon(getResaveImage(), 20, 20), JLabel.LEFT);
+        final JLabel resaveLabel = new JLabel("<html><h3>Re-save</h3></html>", new BufferedImageIcon(getResaveImage(), 30, 30), JLabel.LEFT);
         final JLabel resaveExplanationLabel = new JLabel();
 
         final JLabel thresholdValueLabel = new JLabel();
@@ -229,4 +192,31 @@ public class SettingsPanel extends JPanel {
     public void addActionListener(ActionListener actionListener) {
         actionListeners.add(actionListener);
     }
+
+
+    private static BufferedImage getSettingsImage() {
+        return readImage("images/icon-settings.png");
+    }
+
+    private static BufferedImage getResaveImage() {
+        return readImage("images/icon-resave.png");
+    }
+
+    private static BufferedImage getResizeImage() {
+        return readImage("images/icon-resize.png");
+    }
+
+    private static BufferedImage getRenameImage() {
+        return readImage("images/icon-rename.png");
+    }
+
+    private static BufferedImage readImage(String imageFilename) {
+        try {
+            return ImageIO.read(ClassLoader.getSystemResourceAsStream(imageFilename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
